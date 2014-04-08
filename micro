@@ -5,8 +5,10 @@ import sys
 import curses as c
 import curses.ascii as ascii
 
-from pylib.log import log
 from datetime import datetime
+
+from pylib.log import log
+from pylib.terminal import sanitize_key
 
 class Application:
     mainScr = None
@@ -18,56 +20,51 @@ class Application:
         s.args = args
 
     def __enter__(s):
-        s.initCurses()
+        s.init_curses()
         return s
 
     def __exit__(s, type, value, traceback):
-        s.deinitCurses()
+        s.deinit_curses()
 
-    #TODO: Enable color sup
-    def initCurses(s):
+    # TODO: Enable color sup
+    def init_curses(s):
         s.mainScr = c.initscr()
         c.noecho()
         c.cbreak()
         c.raw()
         s.mainScr.keypad(True)
 
-    def deinitCurses(s):
+    def deinit_curses(s):
         c.nocbreak()
         s.mainScr.keypad(False)
         c.echo()
         c.endwin()
 
-    def showKey(s, key):
+    def show_key(s, key):
         s.mainScr.addstr('{} '.format(key))
 
         for c in key:
             s.mainScr.addstr('0x{:x} '.format(ord(c)))
         s.mainScr.addstr('\n')
 
-    def handleKeystroke(s, key):
-        s.showKey(key)
+    def handle_keystroke(s, key):
+        s.show_key(key)
 
-        if key == "^Q":
-            sys.exit() #Throws SystemExit exception
-
-    def sanitizeKey(s, key):
-        if len(key) == 1 and ascii.isctrl(key):
-            return ascii.unctrl(key)
-
-        return key
+        if key == "Ctrl+Q":
+            sys.exit()  # Throws SystemExit exception
 
     def start(s):
         s.mainScr.clear()
         while True:
             key = s.mainScr.getkey()
-            key = s.sanitizeKey(key)
-            s.handleKeystroke(key)
+            key = sanitize_key(key)
+            s.handle_keystroke(key)
+
 
 def main(progPath, args):
-    os.environ['ESCDELAY']='25'
+    os.environ['ESCDELAY'] = '25'
     with Application(progPath, args) as app:
-       app.start()
+        app.start()
 
 
 log("START")

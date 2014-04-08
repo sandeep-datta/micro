@@ -2,6 +2,13 @@
   TODO
 ========
 
+------------------
+ Design decisions
+------------------
+- Capturing raw keyboard input in a terminal is next to impossible but support for terminals is a must. This is why micro must be implemented as an ncurses application for the time being. An xwindows based implementation with full keyboard support is planned for some later date. The xwindows based version will be based on a custom (limited) implementation of ncurses on X.
+- Handling terminal keyboard input is way too messy. Alt+key is delivered as ESC, Key there is no way distinguishing an ESC following by a keypress and pressing Alt+key.
+    - libtermkey does not have any workaround for this. Press ESC+a in the demo application to see what I mean (it will be reported as <M-a>).
+
 ----------
  Features
 ----------
