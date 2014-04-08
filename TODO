@@ -1,0 +1,29 @@
+========
+  TODO
+========
+
+----------
+ Features
+----------
+
+- Managed sections.
+  - Examples (for python)
+    - Imports. Imports should be ordered by line length.
+    - Code.
+    - Tests
+    - The main function
+
+- Clipboard stack (systemwide?).
+- Tabs
+    - Tab switcher
+- Quick file opener with completion
+- Code completion
+- Syntax parsers in Ometa
+- Refactorings
+    - Extract function
+
+-----------
+ Commands
+-----------
+- Move context to its managed section.
+    - Example: Type an import statement anywhere in the editor and then invoke this command to move it to the imports managed section.
