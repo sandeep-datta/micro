@@ -1,0 +1,7 @@
+.h1 Micro
+
+We are just getting started. This project is not ready for use in anyway.
+
+A text editor inspired by nano and pico. But hopefully will be a little more featureful. See the TODO list for a list of planned features.
+
+This is a modeless editor unlike vim.

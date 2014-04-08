@@ -5,22 +5,22 @@
 ----------
  Features
 ----------
-
+- Quick file opener with auto completion
 - Managed sections.
   - Examples (for python)
     - Imports. Imports should be ordered by line length.
-    - Code.
+    - Code. Functions, classes, globals should be sorted alphabetically.
     - Tests
     - The main function
-
+- Document Map
 - Clipboard stack (systemwide?).
 - Tabs
     - Tab switcher
-- Quick file opener with completion
 - Code completion
 - Syntax parsers in Ometa
-- Refactorings
+- Refactoring
     - Extract function
+- Plugins (in python)
 
 -----------
  Commands
