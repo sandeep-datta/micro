@@ -62,46 +62,30 @@ class Application:
         c.echo()
         c.endwin()
 
-    def doGetKey(s):
-        key = s.mainScr.getkey()
-        #Note: comparing with the string "^Q" will not work since
-        #getkey() returns the actual 1 byte ASCII character equivalent
-        #to Ctrl+Q instead of two characters '^' and 'Q'
-        if key == ascii.ctrl('Q'):
-            return False
-
-        #It seems add str uses ascii.unctrl(c) to print keys
-        #modified by Ctrl
-
+    def showKey(s, key):
         s.mainScr.addstr('{} '.format(key))
-
         for c in key:
             s.mainScr.addstr('0x{:x}'.format(ord(c)))
-
         s.mainScr.addstr('\n')
 
-        return True
+    def handleKeystroke(s, key):
+        s.showKey(key)
 
-    def doGetCh(s):
-        c = s.mainScr.getch()
-        if c == ord(ascii.ctrl('Q')):
-            return False
+        if key == "^Q":
+            sys.exit() #Throws SystemExit exception
 
-        if ascii.isprint(c):
-            s.mainScr.addch(c)
-        else:
-            s.mainScr.addstr("0x{:x} ".format(c))
-        return True
+    def sanitizeKey(s, key):
+        if ascii.isctrl(key):
+            return ascii.unctrl(key)
+
+        return key
 
     def start(s):
         s.mainScr.clear()
-        #s.mainScr.addstr("can_change_color:{}".format(c.can_change_color()))
-        f = s.doGetCh if '--ch' in s.args else s.doGetKey
-        while f():
-            pass
-        #s.mainScr.getkey()
-
-
+        while True:
+            key = s.mainScr.getkey()
+            key = s.sanitizeKey(key)
+            s.handleKeystroke(key)
 
 def main(progPath, args):
     os.environ['ESCDELAY']='25'
@@ -109,14 +93,20 @@ def main(progPath, args):
        app.start()
 
 
+# log("START")
+# main(sys.argv[0], sys.argv[1:])
+# log("END")
 
 
 if __name__ == '__main__':
     try:
         log("START")
         main(sys.argv[0], sys.argv[1:])
-        log("END")
     except Exception as e:
         print("ERROR:", e, file=sys.stderr)
+    except SystemExit:
+        pass
     except:
         print("ERROR: Unknown error.", file=sys.stderr)
+    finally:
+        log("END")
